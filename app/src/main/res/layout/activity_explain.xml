@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#F7F5E0"
+        tools:context="com.example.hp.gestureapp.ExplainActivity">
+
+        <!--
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+            -->
+        <ImageView
+            android:layout_width="1000px"
+            android:layout_height="800px"
+            android:src="@drawable/gesture0"
+            android:layout_gravity="center"
+            android:layout_marginTop="20px"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="gesture0"
+            android:layout_gravity="center"
+            android:textColor="#FF8F01"
+            android:textSize="25sp"/>
+
+        <ImageView
+            android:layout_width="1000px"
+            android:layout_height="800px"
+            android:src="@drawable/gesture1"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="gesture1"
+            android:layout_gravity="center"
+            android:textColor="#FF8F01"
+            android:textSize="25sp"/>
+
+        <ImageView
+            android:layout_width="1000px"
+            android:layout_height="800px"
+            android:src="@drawable/gesture2"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="gesture2"
+            android:layout_gravity="center"
+            android:textColor="#FF8F01"
+            android:textSize="25sp"/>
+
+        <ImageView
+            android:layout_width="1000px"
+            android:layout_height="800px"
+            android:src="@drawable/gesture3"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="gesture3"
+            android:layout_gravity="center"
+            android:textColor="#FF8F01"
+            android:textSize="25sp"/>
+
+        <ImageView
+            android:layout_width="1000px"
+            android:layout_height="800px"
+            android:src="@drawable/gesture4"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="gesture4"
+            android:layout_gravity="center"
+            android:textColor="#FF8F01"
+            android:textSize="25sp"/>
+
+        <ImageView
+            android:layout_width="1000px"
+            android:layout_height="800px"
+            android:src="@drawable/gesture5"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="gesture5"
+            android:layout_gravity="center"
+            android:textColor="#FF8F01"
+            android:textSize="25sp"/>
+
+        <ImageView
+            android:layout_width="1000px"
+            android:layout_height="800px"
+            android:src="@drawable/gesture6"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="gesture6"
+            android:layout_gravity="center"
+            android:textColor="#FF8F01"
+            android:textSize="25sp"/>
+
+        <ImageView
+            android:layout_width="1000px"
+            android:layout_height="800px"
+            android:src="@drawable/gesture7"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="gesture7"
+            android:layout_gravity="center"
+            android:textColor="#FF8F01"
+            android:textSize="25sp"/>
+
+        <ImageView
+            android:layout_width="1000px"
+            android:layout_height="800px"
+            android:src="@drawable/gesture8"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="gesture8"
+            android:layout_gravity="center"
+            android:textColor="#FF8F01"
+            android:textSize="25sp"/>
+
+        <ImageView
+            android:layout_width="1000px"
+            android:layout_height="800px"
+            android:src="@drawable/gesture_nine"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="gesture9"
+            android:layout_gravity="center"
+            android:textColor="#FF8F01"
+            android:textSize="25sp"/>
+    </LinearLayout>
+</ScrollView>
