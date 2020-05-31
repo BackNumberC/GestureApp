@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,9 +26,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_count);
         //去掉顶部标题栏
         if (getSupportActionBar()!=null){
             getSupportActionBar().hide();
@@ -256,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
     //线程AnswerThread（用于判断正误并刷新题目）
     class AnswerThread implements  Runnable{
-        public  void run(){
+        public void run(){
             while (!Thread.currentThread().isInterrupted()){
                 try {
                     Message message = Message.obtain();

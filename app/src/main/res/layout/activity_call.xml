@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F5E0"
+    tools:context="com.example.hp.gestureapp.MainActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="请在摄像头面前作出相应数字"
+        android:textColor="#FF8F01"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:layout_marginTop="150px"/>
+
+    <RelativeLayout
+        android:layout_width="1000px"
+        android:layout_height="500px"
+        android:background="@drawable/border"
+        android:layout_gravity="center"
+        android:layout_marginTop="10px">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="140px"
+            android:layout_marginLeft="10px"
+            android:layout_alignParentLeft="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/random"
+                android:textSize="50sp"
+                android:textColor="#3AC9CC"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="45sp"
+                android:textColor="@android:color/holo_green_light"
+                android:id="@+id/answer_right"
+                />
+        </LinearLayout>
+
+        <SurfaceView
+            android:layout_width="300px"
+            android:layout_height="fill_parent"
+            android:id="@+id/preview"
+            android:layout_gravity="right"
+            android:layout_alignParentRight="true"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="1000px"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:layout_marginTop="150px"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:id="@+id/recognize_result"
+            android:textSize="30sp"
+            android:layout_marginLeft="225px"
+            android:textColor="#FF8F01"
+
+            />
+    </LinearLayout>
+
+</LinearLayout>
