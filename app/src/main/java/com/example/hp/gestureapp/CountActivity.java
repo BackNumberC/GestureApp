@@ -2,7 +2,6 @@ package com.example.hp.gestureapp;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,13 +10,10 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -35,74 +31,73 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
-import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
-import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.imgproc.Moments;
 import org.opencv.ml.SVM;
 import org.opencv.objdetect.HOGDescriptor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback,Camera.PreviewCallback {
-    /*static {
-        System.loadLibrary("native-lib");
-    }*/
-    private String change_path = "/peoplechanged";
+public class CountActivity extends AppCompatActivity implements SurfaceHolder.Callback,Camera.PreviewCallback {
+    public static int camerachoose=0;
     public Bitmap testimg;
     public Bitmap photo;
     public Bitmap end;
     public Bitmap start;
     public Bitmap middle;
     public Matrix matrix;
-    public int cx=0,cy=0;
-    public float cr=0;
-    public double x=0,y=0;
-    public  int hullnum=0;
     public HandTask handTask;
     public LoadHandler mLoadhandler;
 
     private Camera mCamera;
     public int result=11;
     public int answer;
+    public String stringanswer=" ";
+    public int preanswer;
     public Camera.Parameters parameters;
     public Camera.Size size;
     public YuvImage image;
     public ByteArrayOutputStream os;
-    //public Camera.PreviewCallback mPreviewCallback;
     private SurfaceHolder mHolder;
     private SurfaceView mPreview;
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "CountActivity";
     private TextView textView,recognize_result,answer_right;
     public int time=0;
-    public String  question;
+    public String question;
+    public Recognition recognition;
+    public BlockingQueue<Integer> queue;
+    public HashMap<Integer,Integer> map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_count);
-        //去掉顶部标题栏
-        if (getSupportActionBar()!=null){
-            getSupportActionBar().hide();
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+        setContentView(R.layout.activity_count);
+
         mLoadhandler = new LoadHandler();
         textView=findViewById(R.id.random);
         recognize_result=findViewById(R.id.recognize_result);
         answer_right=findViewById(R.id.answer_right);
-
+        recognition =new Recognition();
+        queue = new LinkedBlockingQueue<>(10);
+        map = new HashMap<Integer,Integer>();
         testimg= BitmapFactory.decodeResource(getResources(),R.mipmap.test5);
 
         if (OpenCVLoader.initDebug()) {
@@ -126,16 +121,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         }
 
         mCamera=Camera.open(1);//1是前置摄像头，0是后置摄像头
-        /*
-        //获取支持的尺寸
-        parameters=mCamera.getParameters();
-        List<Camera.Size> preview=mCamera.getParameters().getSupportedPreviewSizes();
-        for (int i=0;i<preview.size();i++){
-            size=preview.get(i);
-            Log.d(TAG, "width:"+size.width+", high:"+size.height);
-        }
-        //parameters.setPreviewSize(240,320);
-        */
+
         //设置练习题
         question="";
         while (result>=10 || result<0){
@@ -173,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             size = mCamera.getParameters().getPreviewSize(); //获取预览大小
             image = new YuvImage(mData, ImageFormat.NV21, size.width, size.height, null);
             os = new ByteArrayOutputStream(mData.length);
-            if(!image.compressToJpeg(new Rect(0, 0, size.width, size.height), 80, os)){
+            if(!image.compressToJpeg(new Rect(0, 0, size.width, size.height), 50, os)){
                 return null;
             }
             byte[] tmp = os.toByteArray();
@@ -182,32 +168,55 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             matrix.postRotate(270);
             middle = Bitmap.createBitmap(start, 0,0, start.getWidth(),  start.getHeight(), matrix, true);
             os.reset();
+
             //从视频流中获取的图像end
-            end = Bitmap.createScaledBitmap(middle, 225, 300, true); //创建新的图像大小
+            end = Bitmap.createScaledBitmap(middle, 240, 320, true); //创建新的图像大小
             //将end图像压缩
-            end.compress(Bitmap.CompressFormat.PNG, 70, os);
+            end.compress(Bitmap.CompressFormat.JPEG, 30, os);
             long middleTime = System.currentTimeMillis(); // 获取中间时间
             Log.i("wsy","代码运行时间： " + (middleTime - startTime) + "ms");
             Mat deal=new Mat();
             Utils.bitmapToMat(end,deal);
-            //获得预测结果answer
-            answer=skinsplit(deal);
+
+            //肤色分割
+            Mat dst = recognition.skinsplit(deal);
+            //去除手腕
+            dst=recognition.wrist(dst);
+            //计算质心坐标
+            recognition.Calculate(dst);
+            //计算手指个数
+            recognition.findHull(dst);
+            //识别数字手势
+            preanswer=(int)predictd(dst);
+
             deal.release();
             long endTime = System.currentTimeMillis(); // 获取结束时间
-            Log.i("wsy","代码运行时间： " + (endTime - middleTime) + "ms");
-
-            long sysTime = System.currentTimeMillis();//获取系统时间
-            CharSequence sysTimeStr = DateFormat.format("hh:mm:ss:mm", sysTime);//时间显示格式
-            Log.i("CVCamera", "已获取"+sysTimeStr);
-            /*
-            if(answer==result){
-                question="";
-                result=11;
-                while (result>=10 || result<0){
-                    question=proQuestion();
+            Log.i("wsy", "代码运行时间： " + (endTime - middleTime) + "ms");
+            if (queue.offer(preanswer)) {
+                //Log.i("wsy","已插入" );
+                if (map.containsKey(preanswer)) {
+                    int temp = map.get(preanswer);
+                    map.put(preanswer, ++temp);
+                } else {
+                    map.put(preanswer, 1);
+                }
+                if (queue.remainingCapacity() == 0){
+                    int max = 0;
+                    Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry<Integer, Integer> entry = iterator.next();
+                        Integer value = entry.getValue();
+                        if (value > max) {
+                            max = value;
+                            answer = entry.getKey();
+                        }
+                    }
+                    stringanswer = Integer.toString(answer);
                 }
             }
-            */
+            Log.i("wsy", "识别结果" + answer);
+            long sysTime = System.currentTimeMillis();//获取系统时间
+            CharSequence sysTimeStr = DateFormat.format("hh:mm:ss:mm", sysTime);//时间显示格式
             return null;
         }
     }
@@ -218,10 +227,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 try {
                     if(null != mCamera)
                     {
-                        mCamera.setOneShotPreviewCallback(MainActivity.this);
-                        Log.i(TAG, "setOneShotPreview...");
+                        mCamera.setOneShotPreviewCallback(CountActivity.this);
+                        //Log.i(TAG, "setOneShotPreview...");
                     }
-                    Thread.sleep(1200);
+                    Thread.sleep(400);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     Thread.currentThread().interrupt();
@@ -232,21 +241,32 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     //线程AnswerThread执行的任务
     public class LoadHandler extends Handler{
         @Override
-        public void handleMessage(Message msg)
-        {
+        public void handleMessage(Message msg){
             super.handleMessage(msg);
-            textView.setText((String)msg.obj);
-            recognize_result.setText("识别结果："+msg.what);
-            Log.d("huidadaan", "answer:"+msg.what+"result:"+result);
-            if (msg.what==result){
+            textView.setText(question);
+            answer_right.setText("");
+            if(msg.obj.equals("10"))
+                msg.obj = "无";
+            recognize_result.setText("识别结果："+msg.obj);
+            if(msg.what==result){
                 answer_right.setText("正确");
                 question="";
                 result=11;
                 while (result>=10 || result<0){
                     question=proQuestion();
                 }
-            }else {
-                answer_right.setText("");
+                stringanswer=" ";
+                queue.clear();
+                map.clear();
+            }else if((String)msg.obj==" "){
+                answer_right.setText(" ");
+            }else{
+                answer_right.setText("错误");
+                if(queue.remainingCapacity()==0){
+                    queue.clear();
+                    map.clear();
+                    stringanswer=" ";
+                }
             }
         }
     }
@@ -257,10 +277,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 try {
                     Message message = Message.obtain();
                     //message.arg1 = result;
-                    message.obj = question;
-                    message.what=answer;
+                    message.obj = stringanswer;
+                    message.what = answer;
                     mLoadhandler.sendMessage(message);
-                    Thread.sleep(1200);
+                    Thread.sleep(500);
                 }catch (InterruptedException e){
                     e.printStackTrace();
                     Thread.currentThread().interrupt();
@@ -270,10 +290,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     //设置摄像头参数
-    private Camera getCamera(){
+    private Camera getCamera() {
         Camera camera;//声明局部变量camera
         try{
-            camera=Camera.open(0);
+            camera=Camera.open(camerachoose);
         }//根据cameraId的设置打开前置摄像头
         catch (Exception e){
             camera=null;
@@ -369,234 +389,18 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         releaseCamera();//预览界面销毁则释放相机
     }
 
-    //处理预测算法汇总
-    public int skinsplit(Mat src) {
-        int result1=0;
-        Mat Dst=new Mat();
-        Dst.create(src.size(),src.type());
-        //中值滤波
-        Imgproc.medianBlur(src,src,5);
-        //将src转化为YCrCb
-        Imgproc.cvtColor(src, src, Imgproc.COLOR_RGB2YCrCb);
-        List<Mat> mv=new ArrayList<>();
-        Core.split(src,mv);
-        Mat dst=new Mat();
-        //对Cr量进行OTSU阈值分割
-        Imgproc.threshold(mv.get(1),dst,127,255,Imgproc.THRESH_BINARY|Imgproc.THRESH_OTSU);
-        //膨胀腐蚀操作
-        Mat k=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(5,5),new Point(-1,-1));
-        Imgproc.morphologyEx(dst,dst,Imgproc.MORPH_ERODE,k);
-        Imgproc.morphologyEx(dst,dst,Imgproc.MORPH_DILATE,k);
-        //获取轮廓
-        double Maxarea=0;
-        int number=0;
-        Mat hierarchy=new Mat();
-        List<MatOfPoint> contours=new ArrayList<MatOfPoint>();
-        Imgproc.findContours(dst,contours,hierarchy,Imgproc.RETR_LIST,Imgproc.CHAIN_APPROX_NONE,new Point(0,0));
-        Log.i("wsy","轮廓： " + contours.size()+ "个");
-        for(int i=0;i<contours.size();i++){
-            double area=Imgproc.contourArea(contours.get(i));
-            if(area>Maxarea){
-                Maxarea=area;
-                number=i;
-            }
-        }
-        //绘制轮廓
-        Imgproc.drawContours(Dst,contours,number,new Scalar(255,255,255),-1);
-        Imgproc.cvtColor(Dst,Dst,Imgproc.COLOR_BGR2GRAY);//轮廓筛选过滤掉无关部分
-        //去除手腕
-        Dst=wrist(Dst);
-        //计算质心坐标
-        Calculate(Dst);
-        //对dst进行最小外接矩形裁剪
-        dst=Dst.clone();
-        Mat hierarchy1=new Mat();
-        List<MatOfPoint> contours1=new ArrayList<MatOfPoint>();
-        Imgproc.findContours(dst,contours1,hierarchy1,Imgproc.RETR_LIST,Imgproc.CHAIN_APPROX_NONE,new Point(0,0));
-        MatOfPoint contour=contours1.get(0);
-        org.opencv.core.Rect R=Imgproc.boundingRect(contour);
-        Mat imgRectROI= new Mat(dst, R);
-        //计算手指个数
-        Dst=findHull(Dst);
-        //将imgRectROI resize成指定尺寸再进行预测
-        Imgproc.resize(imgRectROI,imgRectROI,new Size(96,128));
-        result1=(int)predictd(imgRectROI);
-        //释放所使用的dst
-        dst.release();
-        Dst.release();
-        src.release();
-        return result1;
-    }
-    //手腕去除
-    public Mat wrist(Mat src){
-        Mat mat3=new Mat();
-        Imgproc.distanceTransform(src,mat3,Imgproc.CV_DIST_L1,3);
-        //寻找圆心和半径
-        Mat mat4=new Mat();
-        src.copyTo(mat4);
-        int channels=mat3.channels();
-        cr=0;
-        cx=0;
-        cy=0;
-        float[]data=new float[channels*mat3.cols()];
-        for (int i=0;i<mat3.rows();i++){
-            mat3.get(i,0,data);
-            for (int j=0;j<data.length;j++){
-                if (data[j]>cr){
-                    cr=data[j];
-                    cx=j;
-                    cy=i;
-                }
-            }
-        }
-        //绘制内切圆
-        Imgproc.circle(mat4,new Point(cx,cy),(int) cr,new Scalar(0,0,0),1);
-        /*imageView4=findViewById(R.id.image_test4);
-        Utils.matToBitmap(mat4,bitmap4);
-        imageView4.setImageBitmap(bitmap4);*/
-        //手掌手腕分割
-        Mat mat5=new Mat();
-        src.copyTo(mat5);
-        int chann=src.channels();
-        int wi=src.cols();
-        int hi=src.rows();
-        byte[]data3=new byte[chann*wi];
-        for (int i=hi/2;i<hi;i++){
-            if (i>cy+cr){
-                mat5.get(i,0,data3);
-                for (int j=0;j<data3.length;j++){
-                    data3[j]=(byte)0;
-                }
-                mat5.put(i,0,data3);
-            }
-        }
-        mat3.release();
-        mat4.release();
-        return  mat5;
-    }
-    //计算质心
-    public void Calculate(Mat src){ //计算中心距和七个不变矩
-        x=0;
-        y=0;
-        double params=0;
-        double m00,m10,m01;
-        Imgproc.matchShapes(src,src,2,params);
-        Moments mo;
-        Mat hu=new Mat();
-        mo=Imgproc.moments(src,true);
-        m00=mo.m00;
-        m01=mo.m01;
-        m10=mo.m10;
-        x=m10/m00;
-        y=m01/m00;
-        /*Imgproc.HuMoments(mo,hu);
-        Log.i("huhuhu", "hu:"+hu.toString());
-        int chan=hu.channels();
-        int w=hu.cols();
-        int h=hu.rows();
-        double[] data=new double[chan*w*h];
-        hu.get(0,0,data);
-        for (int j=0;j<data.length&&j<=6;j++){
-            Log.i("huhuhu", "huju:"+data[j]);
-        }*/
-    }
-    //计算手指个数（凸点）
-    public Mat  findHull(Mat src){
-        //寻找凸包点
-        Mat hierarchy=new Mat();
-        int width=src.cols();
-        int height=src.rows();
-        List<MatOfPoint> contours=new ArrayList<>();
-        Point center=new Point();
-        float[] radius={0};
-
-        Imgproc.findContours(src,contours,hierarchy,Imgproc.RETR_LIST,Imgproc.CHAIN_APPROX_NONE,new Point(0,0));
-        MatOfPoint contour=contours.get(0);
-        MatOfPoint2f point2f=new MatOfPoint2f(contour.toArray());
-        Imgproc.minEnclosingCircle(point2f,center,radius);
-
-        ArrayList<Point>  convexHullPointArrayList = new ArrayList<Point>();//初始凸点集
-        ArrayList<Point>  convexHullPoint=new ArrayList<>();//筛除相邻凸点集
-        ArrayList<Point>  convexHull=new ArrayList<>();//手指凸点集
-        MatOfInt  convexHullMatOfInt = new MatOfInt();
-        Imgproc.convexHull( contour, convexHullMatOfInt, false);
-
-        for(int j=0; j < convexHullMatOfInt.toList().size(); j++){
-            convexHullPointArrayList.add(contour.toList().get(convexHullMatOfInt.toList().get(j)));
-        }
-
-        convexHullPoint.add(convexHullPointArrayList.get(0));
-        for(int j=0;j<convexHullPointArrayList.size()-1;j++){
-            double  x1=convexHullPointArrayList.get(j).x;
-            double  y1=convexHullPointArrayList.get(j).y;
-            double  x2=convexHullPointArrayList.get(j+1).x;
-            double  y2=convexHullPointArrayList.get(j+1).y;
-            if(Math.abs(x2-x1)>20||Math.abs(y2-y1)>20){
-                convexHullPoint.add(convexHullPointArrayList.get(j+1));
-            }
-        }
-
-        for(int j=0;j<convexHullPoint.size();j++){
-            double distancex=convexHullPoint.get(j).x-cx;
-            double distancey=convexHullPoint.get(j).y-cy;
-            double distance=cr/3*4;
-            if(distancex*distancex+distancey*distancey>distance*distance&&convexHullPoint.get(j).y-y<0){
-                convexHull.add(convexHullPoint.get(j));
-            }
-        }
-
-        int convexHullcount=convexHull.size();
-        if(convexHullcount>1){
-            double  x1=convexHull.get(0).x;
-            double  y1=convexHull.get(0).y;
-            double  x2=convexHull.get(convexHullcount-1).x;
-            double  y2=convexHull.get(convexHullcount-1).y;
-            if(Math.abs(x2-x1)<20||Math.abs(y2-y1)<20){
-                convexHull.remove(convexHullcount-1);
-            }
-        }
-
-        Mat dst=new Mat();
-        dst.create(height,width,CvType.CV_8UC3);
-        Imgproc.drawContours(dst,contours,0,new Scalar(255,255,255),1);
-        for(int i=0;i<convexHull.size();i++) {//连接凸点质心线
-            Imgproc.line(dst,new Point(convexHull.get(i).x,convexHull.get(i).y),new Point(x,y),new Scalar(255,255,0),1);
-        }
-        for(int i=0;i<convexHull.size();i++) {//凸点
-            Imgproc.circle(dst,new Point(convexHull.get(i).x,convexHull.get(i).y),2,new Scalar(255,0,0),2);
-        }
-        Imgproc.circle(dst,center,(int)radius[0],new Scalar(255,255,0),2);
-        Imgproc.circle(dst,new Point(cx,cy),(int)cr,new Scalar(255,255,0),2);
-        hullnum=convexHull.size();
-        Log.i("result","手指个数：" +hullnum );
-        return  dst;
-    }
-    //SVM预测手势
-    public float predictd(Mat src){
-        File mSvmModel;
-        float result2=0;
+    //SVM检测手势
+    public float dectored(Mat src){
+        float label=0;
         SVM mClassifier=SVM.create();
         try {
             // load cascade file from application resources
-            InputStream is1 = getResources().openRawResource(R.raw.mysvm1);
-            InputStream is2 = getResources().openRawResource(R.raw.mysvm2);
-            InputStream is3 = getResources().openRawResource(R.raw.mysvm3);
-            InputStream is4 = getResources().openRawResource(R.raw.mysvm45);
-            InputStream is;
+            InputStream is = this.getResources().openRawResource(R.raw.hogsvm);
             File mnist_modelDir = getDir("mnist_model", Context.MODE_PRIVATE);
-            mSvmModel = new File(mnist_modelDir, "mysvm.xml");
+            File mSvmModel = new File(mnist_modelDir, "mysvm.xml");
             FileOutputStream os = new FileOutputStream(mSvmModel);
-
             byte[] buffer = new byte[4096];
             int bytesRead;
-            if(hullnum==1||hullnum==0)
-                is=is1;
-            else if(hullnum==2)
-                is=is2;
-            else if(hullnum==3)
-                is=is3;
-            else
-                is=is4;
             while ((bytesRead = is.read(buffer)) != -1) {
                 os.write(buffer, 0, bytesRead);
             }
@@ -604,6 +408,72 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             os.close();
             mClassifier=SVM.load(mSvmModel.getAbsolutePath());
             mnist_modelDir.delete();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Failed to load cascade. Exception thrown: " + e);
+        }
+        HOGDescriptor hog = new HOGDescriptor(new Size(96, 128), new Size(96, 64), new Size(96, 32), new Size(48, 32), 4);
+        MatOfFloat descriptor=new MatOfFloat();
+        Mat hierarchy1=new Mat();
+        List<MatOfPoint> contours1=new ArrayList<MatOfPoint>();
+        Imgproc.findContours(src,contours1,hierarchy1, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_NONE,new Point(0,0));
+        Mat imgRectROI;
+        try{
+            MatOfPoint contour=contours1.get(0);
+            org.opencv.core.Rect R= Imgproc.boundingRect(contour);
+            imgRectROI= new Mat(src, R);
+        }catch (Exception e){
+            imgRectROI = src.clone();
+        }
+        Imgproc.resize(imgRectROI,imgRectROI,new Size(96,128));
+        /*Bitmap end  = Bitmap.createBitmap(imgRectROI.width(), imgRectROI.height(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(imgRectROI,end);
+        saveBitmap(end,Integer.toString(count++)+".jpg");*/
+        //计算src图像的hog特征，放入descriptor数组中
+        hog.compute(imgRectROI,descriptor);
+        Mat testDescriptor = new Mat(1,descriptor.rows(),CvType. CV_32FC1);
+        //将hog特征列向量转换为行向量
+        for (int i = 0; i<descriptor.rows(); i++) {
+            testDescriptor.put(0, i, descriptor.get(i,0));
+        }
+        label=mClassifier.predict(testDescriptor);
+        Log.i("result","识别结果：" +label );
+        //Toast.makeText(this, "识别结果："+result, Toast.LENGTH_SHORT).show();
+        return  label;
+    }
+    //SVM预测手势
+    public float predictd(Mat src){
+        float label=0;
+        SVM mClassifier=SVM.create();
+        try {
+            // load cascade file from application resources
+            InputStream is1 = getResources().openRawResource(R.raw.svm1);
+            InputStream is2 = getResources().openRawResource(R.raw.svm2);
+            InputStream is3 = getResources().openRawResource(R.raw.svm3);
+            InputStream is;
+            File svm_modelDir = getDir("svm_model", Context.MODE_PRIVATE);
+            File mSvmModel = new File(svm_modelDir, "svm.xml");
+            FileOutputStream os = new FileOutputStream(mSvmModel);
+
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            if(recognition.hullnum==1||recognition.hullnum==0)
+                is=is1;
+            else if(recognition.hullnum==2)
+                is=is2;
+            else if(recognition.hullnum==3)
+                is=is3;
+            else if(recognition.hullnum==4)
+                return label=4;
+            else
+                return label=5;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            is.close();
+            os.close();
+            mClassifier=SVM.load(mSvmModel.getAbsolutePath());
+            svm_modelDir.delete();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -611,59 +481,32 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         }
         HOGDescriptor hog = new HOGDescriptor(new Size(96, 128), new Size(96, 64), new Size(96, 32), new Size(48, 32), 4);
         MatOfFloat descriptor=new MatOfFloat();
-        //计算src图像的hog特征，放入descriptor数组中
-        hog.compute(src,descriptor);
 
+        Mat hierarchy1=new Mat();
+        List<MatOfPoint> contours1=new ArrayList<MatOfPoint>();
+        Imgproc.findContours(src,contours1,hierarchy1, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_NONE,new Point(0,0));
+        Mat imgRectROI;
+        try{
+            MatOfPoint contour=contours1.get(0);
+            org.opencv.core.Rect R= Imgproc.boundingRect(contour);
+            imgRectROI= new Mat(src, R);
+        }catch (Exception e){
+            imgRectROI = src.clone();
+        }
+        Imgproc.resize(imgRectROI,imgRectROI,new Size(96,128));
+
+        //计算src图像的hog特征，放入descriptor数组中
+        hog.compute(imgRectROI,descriptor);
         Mat testDescriptor = new Mat(1,descriptor.rows(),CvType. CV_32FC1);
         //将hog特征列向量转换为行向量
         for (int i = 0; i<descriptor.rows(); i++)
         {
             testDescriptor.put(0, i, descriptor.get(i,0));
-
         }
-        result2=mClassifier.predict(testDescriptor);
-        Log.i("result","识别结果：" +result2 );
+        label=mClassifier.predict(testDescriptor);
+        Log.i("result","识别结果：" +label );
         //Toast.makeText(this, "识别结果："+result, Toast.LENGTH_SHORT).show();
-        return  result2;
-    }
-    //保存图片至相册
-    public void saveBitmap(Bitmap bitmap, String bitName){
-        String fileName ;
-        File file ;
-        if(Build.BRAND .equals("Xiaomi") ){ // 小米手机
-            fileName = Environment.getExternalStorageDirectory().getPath()+"/DCIM/Camera/"+bitName ;
-        }else{  // Meizu 、Oppo
-            fileName = Environment.getExternalStorageDirectory().getPath()+"/DCIM/"+bitName ;
-        }
-        file = new File(fileName);
-
-        if(file.exists()){
-            file.delete();
-        }
-        FileOutputStream out;
-        try{
-            out = new FileOutputStream(file);
-            // 格式为 JPEG，照相机拍出的图片为JPEG格式的，PNG格式的不能显示在相册中
-            if(bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out))
-            {
-                out.flush();
-                out.close();
-// 插入图库
-                MediaStore.Images.Media.insertImage(this.getContentResolver(), file.getAbsolutePath(), bitName, null);
-
-            }
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-
-        }
-        // 发送广播，通知刷新图库的显示
-        this.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + fileName)));
+        return  label;
     }
     //设置问题和答案
     private String proQuestion(){

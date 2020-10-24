@@ -1,12 +1,11 @@
 package com.example.hp.gestureapp;
 
-/**
- * Created by HP on 2019/2/27.
- */
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.WindowManager;
 
 import java.util.ArrayList;
@@ -17,12 +16,12 @@ public class ExplainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_explain);
-        //去掉顶部标题栏
-        if (getSupportActionBar()!=null){
-            getSupportActionBar().hide();
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT)
+        {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+        setContentView(R.layout.activity_explain);
         /*
         initGesture();
         RecyclerView recyclerView=findViewById(R.id.recycler_view);

@@ -4,8 +4,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F5E0"
-    tools:context="com.example.hp.gestureapp.MainActivity">
+    android:fitsSystemWindows="true"
+    android:clipToPadding="true"
+    tools:context="com.example.hp.gestureapp.CountActivity">
 
     <TextView
         android:layout_width="match_parent"
@@ -37,16 +38,10 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:id="@+id/random"
-                android:textSize="50sp"
+                android:textSize="30sp"
                 android:textColor="#3AC9CC"
                 />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="45sp"
-                android:textColor="@android:color/holo_green_light"
-                android:id="@+id/answer_right"
-                />
+
         </LinearLayout>
 
         <SurfaceView
@@ -72,9 +67,36 @@
             android:id="@+id/recognize_result"
             android:textSize="30sp"
             android:layout_marginLeft="225px"
-            android:textColor="#FF8F01"
+            android:textColor="#FF8F01" />
+    </LinearLayout>
 
-            />
+    <LinearLayout
+        android:layout_width="1000px"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150px"
+        android:layout_gravity="center">
+
+        <Button
+            android:layout_width="300px"
+            android:layout_height="150px"
+            android:text="拨号"
+            android:textStyle="bold"
+            android:textColor="@color/colorwhile"
+            android:id="@+id/recognize_call"
+            android:textSize="20sp"
+            android:layout_marginLeft="50px"
+            android:background="@drawable/buttonshape"/>
+
+        <Button
+            android:layout_width="300px"
+            android:layout_height="150px"
+            android:text="删除"
+            android:textStyle="bold"
+            android:textColor="@color/colorwhile"
+            android:id="@+id/recognize_delete"
+            android:textSize="20sp"
+            android:layout_marginLeft="300px"
+            android:background="@drawable/buttonshape"/>
     </LinearLayout>
 
 </LinearLayout>

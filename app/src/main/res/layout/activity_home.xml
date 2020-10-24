@@ -4,55 +4,156 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background"
-    tools:context="com.example.hp.gestureapp.HomeActivity">
+    android:fitsSystemWindows="true"
+    android:clipToPadding="true"
+    tools:context="com.example.hp.gestureapp.HomeActivity"
+    xmlns:cw="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="手势速算"
-        android:textStyle="bold"
+        android:layout_marginTop="50px"
+        android:layout_marginLeft="50px"
+        android:gravity="left"
         android:shadowColor="#FFFF"
-        android:textColor="#F3610D"
         android:shadowDx="8.0"
         android:shadowDy="8.0"
         android:shadowRadius="3.0"
-        android:gravity="center"
-        android:textSize="60sp"
-        android:layout_marginTop="300px"/>
-    <!--
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="手势速算"
-        android:textColor="#FFFF"
-        android:layout_gravity="center"
-        android:textSize="52sp"
-        android:textStyle="italic"
-        android:layout_marginTop="-190px"/>
-    -->
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/start_game"
-        android:text="开始游戏"
-        android:textColor="#FFFF"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:layout_marginTop="300px"
-        android:textSize="13pt"
-        android:background="@drawable/buttonshape"
-        />
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/explain_game"
-        android:text="游戏说明"
-        android:textColor="#FFFF"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:layout_marginTop="80px"
-        android:textSize="13pt"
-        android:background="@drawable/buttonshape"/>
+        android:text="手势识别.."
+        android:textColor="#0F0F0E"
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10px"
+        android:layout_marginLeft="50px"
+        android:layout_marginBottom="5px"
+        android:gravity="left"
+        android:shadowColor="#FFFF"
+        android:shadowDx="8.0"
+        android:shadowDy="8.0"
+        android:shadowRadius="3.0"
+        android:text="让新的交互方式，变成一种生产力！"
+        android:textColor="#3C3C3A"
+        android:textSize="15sp" />
+
+    <RelativeLayout
+        android:layout_width="900px"
+        android:layout_height="220px"
+        android:layout_gravity="center"
+        android:layout_marginTop="200px">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="40px"
+            android:layout_alignParentLeft="true">
+
+            <ImageView
+                android:layout_width="180px"
+                android:layout_height="180px"
+                android:layout_marginLeft="50px"
+                android:src="@drawable/vlcicon"/>
+
+            <ImageView
+                android:layout_width="180px"
+                android:layout_height="180px"
+                android:layout_marginLeft="150px"
+                android:src="@drawable/numbersicon"/>
+
+            <ImageView
+                android:layout_width="180px"
+                android:layout_height="180px"
+                android:layout_marginLeft="125px"
+                android:src="@drawable/documentsfolder"/>
+        </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="900px"
+        android:layout_height="100px"
+        android:layout_gravity="center"
+        android:layout_marginTop="0px">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5px"
+            android:layout_alignParentBottom="true">
+            <TextView
+                android:layout_width="200px"
+                android:layout_height="150px"
+                android:layout_marginLeft="65px"
+                android:text="快速识别"/>
+            <TextView
+                android:layout_width="150px"
+                android:layout_height="150px"
+                android:text="无接触"
+                android:layout_marginLeft="145px"/>
+            <TextView
+                android:layout_width="150px"
+                android:layout_height="150px"
+                android:text="益智"
+                android:layout_marginLeft="175px"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50px"
+        android:layout_marginLeft="50px"
+        android:gravity="left"
+        android:shadowColor="#FFFF"
+        android:shadowDx="8.0"
+        android:shadowDy="8.0"
+        android:shadowRadius="3.0"
+        android:text="为您推荐的识别服务"
+        android:textColor="#3C3C3A"
+        android:textSize="15sp" />
+    <com.example.hp.gestureapp.CustomButton
+        android:layout_width="950px"
+        android:layout_height="300px"
+        cw:tag="速算"
+        cw:text="让我们用双手，开启一场头脑风暴吧!"
+        android:id="@+id/count"
+        android:layout_gravity="center"
+        android:layout_marginTop="30px"
+        android:background="@drawable/buttonshape1"/>
+    <com.example.hp.gestureapp.CustomButton
+        android:layout_width="950px"
+        android:layout_height="300px"
+        cw:tag="拨号"
+        cw:text="快用隔空手势，拨打那个特殊的号码!"
+        android:id="@+id/call"
+        android:layout_gravity="center"
+        android:layout_marginTop="30px"
+        android:background="@drawable/buttonshape2"/>
+    <com.example.hp.gestureapp.CustomButton
+        android:layout_width="950px"
+        android:layout_height="300px"
+        cw:tag="说明"
+        cw:text="看一看你的手势标不标准咯!
+"
+        android:id="@+id/explain_game"
+        android:layout_gravity="center"
+        android:layout_marginTop="30px"
+        android:background="@drawable/buttonshape3"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="200px"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="220px"
+        android:layout_marginBottom="0px"
+        android:background="@drawable/buttonshape4"
+        android:gravity="center"
+        android:shadowColor="#FFFF"
+        android:shadowRadius="3.0"
+        android:text="技术支持：XXXX大学XX学院"
+        android:textColor="#3C3C3A"
+        android:textSize="15sp" />
 </LinearLayout>

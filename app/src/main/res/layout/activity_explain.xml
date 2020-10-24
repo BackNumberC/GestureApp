@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#F7F5E0"
+        android:fitsSystemWindows="true"
+        android:clipToPadding="true"
         tools:context="com.example.hp.gestureapp.ExplainActivity">
 
         <!--

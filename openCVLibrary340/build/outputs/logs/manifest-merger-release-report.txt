@@ -1,37 +1,37 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml:2:1-6:12
-INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml:2:1-6:12
-INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml:2:1-6:12
-INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml:2:1-6:12
-INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml:2:1-6:12
-INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml:2:1-6:12
-INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml:2:1-6:12
+ADDED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml:2:1-6:12
+INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml:2:1-6:12
+INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml:2:1-6:12
+INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml:2:1-6:12
+INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml:2:1-6:12
+INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml:2:1-6:12
+INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml:2:1-6:12
 	package
-		ADDED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml:3:7-27
-		INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
-		INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
+		ADDED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml:3:7-27
+		INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
+		INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
 	android:versionName
-		ADDED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml:5:7-34
-		INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
-		INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
+		ADDED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml:5:7-34
+		INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
+		INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml:2:11-69
+		ADDED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml:2:11-69
 	android:versionCode
-		ADDED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml:4:7-33
-		INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
-		INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
+		ADDED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml:4:7-33
+		INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
+		INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
 uses-sdk
-INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
-INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
-INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
-INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
+INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
+INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
+INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
+INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
-		ADDED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
-		INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
+		INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
+		ADDED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
+		INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
-		ADDED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
-		INJECTED from /Users/zhangyue/AndroidStudioProjects/GestureApp/openCVLibrary340/src/main/AndroidManifest.xml
+		INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
+		ADDED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
+		INJECTED from E:\AndroidStdioPlace\GestureApp\openCVLibrary340\src\main\AndroidManifest.xml
